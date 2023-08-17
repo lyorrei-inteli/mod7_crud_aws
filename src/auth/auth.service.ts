@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { Role } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 import { SignupDto } from './dtos/signup.dto';
 import { UsersService } from 'src/users/users.service';
 
@@ -28,11 +28,9 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
+  async login(user: User) {
     const payload = {
-      email: user.email,
-      sub: user.userId,
-      role: user.role,
+      id: user.id,
     };
 
     return {
@@ -41,6 +39,16 @@ export class AuthService {
   }
 
   async signup(user: SignupDto) {
+    // check if user already exists
+    const existingUser = await this.prismaService.user.findUnique({
+      where: {
+        email: user.email,
+      },
+    });
+    if (existingUser) {
+      throw new ConflictException('User already exists');
+    }
+
     const saltOrRounds = 10;
     const hash = await bcrypt.hash(user.password, saltOrRounds);
     const newUser = await this.prismaService.user.create({

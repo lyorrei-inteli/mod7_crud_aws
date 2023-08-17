@@ -16,13 +16,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Status {
-  Pending
-  InProgress
-  Finished
-  Evaluated
-}
-
 model User {
   id              String            @id @default(uuid())
   email           String            @unique
@@ -30,15 +23,14 @@ model User {
   lastName        String
   password        String
   reconstruireId  String            @unique
-  isAdmin         Boolean           @default(false)
   roles           Role[]            @default([Nurse])
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
   Course          Course[]
   Activity        Activity[]
   ActivityStudent ActivityStudent[]
   nurse           Nurse?
   teacher         Teacher?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 }
 
 enum Role {
@@ -109,4 +101,11 @@ model ActivityStudent {
   status     Status   @default(Pending)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+enum Status {
+  Pending
+  InProgress
+  Finished
+  Evaluated
 }

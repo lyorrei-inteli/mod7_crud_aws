@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -8,9 +12,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
-  canActivate(context) {
+  async canActivate(context: ExecutionContext) {
     // Adicione a validação JWT padrão primeiro
-    const valid = super.canActivate(context);
+    const valid = await super.canActivate(context);
+
     if (!valid) {
       throw new UnauthorizedException('Invalid token');
     }
