@@ -24,11 +24,9 @@ export class AuthController {
     return this.authService.signup(signupDto);
   }
 
-  @ApiBody({ type: LoginDto })
-  @Validate(LoginDto)
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req, @Res() res: Response) {
+  async login(@Request() req, @Res() res: Response, @Body() _: LoginDto) {
     const { access_token } = await this.authService.login(req.user);
     res.cookie('jwt', access_token, {
       httpOnly: true,
