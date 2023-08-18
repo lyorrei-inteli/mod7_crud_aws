@@ -1,0 +1,111 @@
+generator client {
+  provider  = "prisma-client-js"
+  interface = "sync"
+}
+
+generator erd {
+  provider                  = "prisma-erd-generator"
+  theme                     = "default"
+  output                    = "../images/db_scheme/DATABASERELATIONSHIP.svg"
+  includeRelationFromFields = true
+  ignoreEnums               = true
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String            @id @default(uuid())
+  email           String            @unique
+  firstName       String
+  lastName        String
+  password        String
+  reconstruireId  String            @unique
+  roles           Role[]            @default([Nurse])
+  Course          Course[]
+  Activity        Activity[]
+  ActivityStudent ActivityStudent[]
+  nurse           Nurse?
+  teacher         Teacher?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+enum Role {
+  Nurse
+  Teacher
+  Admin
+}
+
+model Nurse {
+  userId         String   @id
+  user           User     @relation(fields: [userId], references: [id])
+  coren          String
+  birthDate      DateTime
+  address        String
+  phone          String
+  university     String
+  postgraduated  Boolean
+  specialization String
+}
+
+model Teacher {
+  userId   String @id
+  user     User   @relation(fields: [userId], references: [id])
+  document String
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  modules     Module[]
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String?
+}
+
+model Module {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  courseId    String
+  course      Course     @relation(fields: [courseId], references: [id])
+  activity    Activity[]
+}
+
+model Activity {
+  id              String            @id @default(uuid())
+  teacherId       String
+  teacher         User              @relation(fields: [teacherId], references: [id])
+  name            String
+  moduleId        String            @unique
+  module          Module            @relation(fields: [moduleId], references: [id])
+  description     String?
+  content         String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  ActivityStudent ActivityStudent[]
+}
+
+model ActivityStudent {
+  id         String   @id @default(uuid())
+  activityId String
+  activity   Activity @relation(fields: [activityId], references: [id])
+  studentId  String
+  student    User     @relation(fields: [studentId], references: [id])
+  answer     String?
+  grade      Int?
+  feedback   String?
+  status     Status   @default(Pending)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+enum Status {
+  Pending
+  InProgress
+  Finished
+  Evaluated
+}
