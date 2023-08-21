@@ -5,10 +5,21 @@ import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+  });
 
   // Set up Swagger options
-  const config = new DocumentBuilder().setTitle('Nest API').build();
+  const config = new DocumentBuilder()
+    .setTitle('Nest API')
+    .addBearerAuth({
+      description: 'Please provide a JWT token',
+      type: 'http',
+      bearerFormat: 'Bearer',
+      scheme: 'Bearer',
+      in: 'header',
+    })
+    .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
@@ -25,6 +36,6 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
-  await app.listen(3000);
+  await app.listen(3001);
 }
 bootstrap();

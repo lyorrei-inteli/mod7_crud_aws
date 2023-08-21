@@ -8,9 +8,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
-  canActivate(context) {
+  async canActivate(context) {
     // Adicione a validação JWT padrão primeiro
-    const valid = super.canActivate(context);
+    const valid = await super.canActivate(context);
     if (!valid) {
       throw new UnauthorizedException('Invalid token');
     }
@@ -23,7 +23,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     const request = context.switchToHttp().getRequest();
     const userRoles = request.user.roles;
-
+    console.log('user: ', request.user);
     const hasRole = userRoles.some((role: string) => roles.includes(role));
 
     if (hasRole) {

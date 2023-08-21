@@ -6,13 +6,12 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { AuthService } from './auth.service';
-import { SignupDto } from './dtos/signup.dto';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { LoginDto } from './dtos/login.dto';
-import { Validate } from 'class-validator';
+import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { AuthService } from './auth.service';
+import { LoginDto } from './dtos/login.dto';
+import { SignupDto } from './dtos/signup.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -24,19 +23,17 @@ export class AuthController {
     return this.authService.signup(signupDto);
   }
 
-  @ApiBody({ type: LoginDto })
-  @Validate(LoginDto)
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req, @Res() res: Response) {
+  async login(@Request() req, @Res() res: Response, @Body() _: LoginDto) {
     const { access_token } = await this.authService.login(req.user);
-    res.cookie('jwt', access_token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-      maxAge: 60, // 60 seconds
-    });
-    res.send({ access_token });
+    // res.cookie('jwt', access_token, {
+    //   httpOnly: true,
+    //   sameSite: 'lax',
+    //   secure: process.env.NODE_ENV === 'production',
+    //   path: '/',
+    //   maxAge: 3600,
+    // });
+    res.send({ token: access_token, user: req.user });
   }
 }
