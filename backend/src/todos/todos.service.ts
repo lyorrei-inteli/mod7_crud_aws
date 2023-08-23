@@ -5,7 +5,10 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class TodosService {
   constructor(private prismaService: PrismaService) {}
   async findAll(userId) {
-    return this.prismaService.todo.findMany({ where: { userId } });
+    return this.prismaService.todo.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
   async create(data) {

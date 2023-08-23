@@ -1,20 +1,13 @@
-'use client'
-import { routes } from "@/config/routes";
-import { signOut } from "next-auth/react";
-import React from "react";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
+import { LogoutButton } from "../LogoutButton";
 
-export const Navbar = () => {
+export const Navbar = async () => {
+    const session = await getServerSession(authOptions);
     return (
-        <div className="fixed right-0 top-0">
-            <button
-                className="bg-primary transition-all hover:scale-105 m-4 text-white font-bold py-2 px-4 rounded"
-                onClick={() => signOut({
-                  redirect: true,
-                  callbackUrl: routes.auth.login
-                })}
-            >
-                Logout
-            </button>
+        <div className="fixed w-full flex justify-between items-center p-4 right-0 top-0">
+            <p>{session?.user?.email}</p>
+            <LogoutButton />
         </div>
     );
 };

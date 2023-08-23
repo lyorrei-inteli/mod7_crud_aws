@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en">
             <body className={montserrat.className}>
                 {children}
-                <ToastContainer />
+                <ToastContainer position="top-center" />
             </body>
         </html>
     );

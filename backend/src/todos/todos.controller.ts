@@ -14,6 +14,7 @@ import { TodosService } from './todos.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from '@prisma/client';
+import { EditTodoDto } from './dtos/edit-todo.dto';
 
 @ApiTags('Todos')
 @Controller('todos')
@@ -42,11 +43,11 @@ export class TodosController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Patch(':id')
-  async update(@Request() req, @Body() createTodoDto: CreateTodoDto) {
+  async update(@Request() req, @Body() editTodoDto: EditTodoDto) {
     const { id } = req.params;
     const { userId } = req.user;
     const updatedTodo = {
-      ...createTodoDto,
+      ...editTodoDto,
       userId,
     };
     return await this.todosService.update(id, userId, updatedTodo);
