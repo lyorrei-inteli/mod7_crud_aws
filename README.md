@@ -25,6 +25,48 @@ Segurança na Autenticação: Graças à implementação do JWT (JSON Web Token)
   - [next-auth](https://next-auth.js.org/) - Autenticação JWT
   - [Tailwind CSS](https://tailwindcss.com/) - Framework CSS
 
+## 🔍 Por que Essas Tecnologias?
+
+- **NestJS**: Este é um framework de back-end progressivo para construção de aplicações eficientes, confiáveis e escaláveis em Node.js. Sua arquitetura modular, baseada em decorators, oferece uma estrutura coerente e extensível que é fácil de manter.
+
+- **@nestjs/passport e next-auth**: A autenticação é uma parte vital de qualquer aplicação moderna. NestJS Passport e next-auth oferecem estratégias de autenticação flexíveis, incluindo JWT, o que ajuda a garantir que os dados dos usuários permaneçam seguros.
+
+- **Swagger**: Uma ferramenta essencial para a criação de documentação API auto-gerada. Ela permite que os desenvolvedores e consumidores da API interajam com a API sem qualquer implementação lógica, ajudando a entender e testar endpoints.
+
+- **Prisma**: Um ORM moderno que facilita a conexão com bancos de dados. Sua abordagem tipo-safe e auto-generated elimina uma grande quantidade de código boilerplate e possíveis erros, tornando a interação com o banco de dados mais intuitiva e segura.
+
+- **PostgreSQL**: Um poderoso sistema de banco de dados relacional de código aberto com mais de 30 anos de desenvolvimento ativo. É conhecido por sua confiabilidade, robustez e desempenho.
+
+- **Next.js**: Uma estrutura React que fornece recursos como Server Side Rendering (SSR) e Static Site Generation (SSG), garantindo desempenho, SEO e otimização de carregamento de páginas.
+
+- **Tailwind CSS**: Este framework CSS utilitário fornece uma abordagem mais eficiente e modular para estilizar aplicações, permitindo designs responsivos com menos código customizado.
+
+## 📚 Estrutura do Banco de Dados
+
+A aplicação utiliza o Prisma, um ORM (Object-Relational Mapping) moderno, para definir e interagir com a estrutura do banco de dados. Abaixo, você encontrará uma descrição detalhada das configurações e modelos definidos no esquema do Prisma:
+
+### Modelos:
+
+1. **User**:
+    - **id**: Um identificador único para cada usuário, gerado automaticamente usando UUID.
+    - **email**: Endereço de email do usuário. É único, o que significa que não podem existir dois usuários com o mesmo email.
+    - **password**: Senha do usuário armazenada.
+    - **name**: Nome do usuário.
+    - **todos**: Uma relação que indica todas as tarefas (todos) associadas a um usuário.
+    - **roles**: Define os papéis associados a um usuário. Por padrão, um usuário tem o papel de `USER`.
+    - **createdAt**: A data e a hora em que o registro do usuário foi criado.
+
+2. **Role (Enum)**:
+    - Enumeração que define os possíveis papéis no sistema: `USER` e `ADMIN`.
+
+3. **Todo**:
+    - **id**: Um identificador único para cada tarefa, gerado automaticamente usando UUID.
+    - **title**: Título ou descrição da tarefa.
+    - **completed**: Um booleano que indica se a tarefa foi concluída. Por padrão, é `false`.
+    - **user**: Uma relação que associa a tarefa a um usuário específico.
+    - **userId**: Chave estrangeira que refere-se ao ID do usuário associado a essa tarefa.
+    - **createdAt**: A data e a hora em que a tarefa foi criada.
+
 ## 🚀 Instalação e Uso
 
 ### Pré-requisitos
@@ -46,6 +88,22 @@ Para parar os containers, use:
 ```bash
 docker compose down
 ```
+
+### Docker hub images 
+#### Backend
+Link para a imagem do backend: <a href="https://hub.docker.com/repository/docker/lyorrei/todo-platform-backend">Clique aqui</a>
+
+Link completo para o backend: https://hub.docker.com/repository/docker/lyorrei/todo-platform-backend
+
+#### Frontend
+Link para a imagem do frontend: <a href="https://hub.docker.com/repository/docker/lyorrei/todo-platform-frontend">Clique aqui</a>
+
+Link completo para o frontend: https://hub.docker.com/repository/docker/lyorrei/todo-platform-frontend
+
+#### Banco de dados (PostgreSQL)
+Foi utilizada a imagem oficial do PostgreSQL, disponível no Docker Hub.
+
+
 
 ### Persistência dos Dados
 
