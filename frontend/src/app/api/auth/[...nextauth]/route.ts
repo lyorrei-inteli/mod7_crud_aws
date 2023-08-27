@@ -2,6 +2,7 @@ import type { AuthOptions } from "next-auth";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { axiosInstance } from "../../../../../axios";
+import { fetchInstance } from "@/config/fetch";
 
 export const authOptions: AuthOptions = {
     providers: [
@@ -13,13 +14,19 @@ export const authOptions: AuthOptions = {
             },
             async authorize(credentials, req) {
                 try {
-                    const { data } = await axiosInstance.post("/auth/login", {
-                        email: credentials?.email,
-                        password: credentials?.password,
-                    });
-                    return { ...data.user, apiToken: data.token };
+                    const res = await fetchInstance(
+                        "/auth/login",
+                        {
+                            method: "POST",
+                            body: JSON.stringify({ email: credentials?.email, password: credentials?.password }),
+                        }
+                    );
+                    console.log("res:", res)
+                    
+                    return { ...res.user, apiToken: res.token };
                 } catch (error: any) {
-                     throw new Error(error.response.data.message)
+                    console.log("error:", error)
+                    throw new Error(error.message || error);
                 }
             },
         }),

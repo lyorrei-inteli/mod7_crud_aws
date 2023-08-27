@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { axiosInstance } from "../../../axios";
+import { fetchInstance } from "@/config/fetch";
 
 const schema = yup.object({
     name: yup.string().required("Esse campo é obrigatório."),
@@ -29,18 +30,18 @@ const SignupForm: React.FC = () => {
 
     const onSubmit = async (data: any) => {
         try {
-            await axiosInstance.post("/auth/signup", data);
+            await fetchInstance("/auth/signup", { method: "POST", body: JSON.stringify(data) });
 
             toast.success("Signup realizado com sucesso.");
             router.replace("/auth/login");
         } catch (err: any) {
-            toast.error(err.response.data.message);
+            toast.error(err.message);
         }
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-             <Input
+            <Input
                 name="name"
                 register={register}
                 label="Nome"
@@ -69,8 +70,9 @@ const SignupForm: React.FC = () => {
                 inputDesign={InputDesign.LOGIN}
             />
             <Button>CRIAR CONTA</Button>
-            <Link href={"/auth/login"} className="text-center text-primary hover:scale-105 transition-all">Login</Link>
-
+            <Link href={"/auth/login"} className="text-center text-primary hover:scale-105 transition-all">
+                Login
+            </Link>
         </form>
     );
 };
