@@ -67,6 +67,33 @@ A aplicação utiliza o Prisma, um ORM (Object-Relational Mapping) moderno, para
     - **userId**: Chave estrangeira que refere-se ao ID do usuário associado a essa tarefa.
     - **createdAt**: A data e a hora em que a tarefa foi criada.
 
+## 📂 Estrutura de Pastas
+
+O projeto está dividido em duas partes principais: o backend, que utiliza NestJS, e o frontend, que é baseado no Next.js. Abaixo está uma visão geral da organização e estrutura das pastas do projeto:
+
+```
+📦 Todo project
+ ┣ 📂 backend               # Pasta raiz do backend (NestJS)
+ ┃ ┣ 📂 prisma              # Modelo do banco de dados e migrações
+ ┃ ┣ 📂 src                 # Código-fonte do backend
+ ┃ ┗ 📜 main.ts             # Ponto de entrada da aplicação NestJS
+ ┣ 📂 frontend              # Pasta raiz do frontend (Next.js)
+ ┃ ┣ 📂 src                 # Código-fonte do frontend
+ ┃ ┣ ┣ 📂 components        # Componentes reutilizáveis da UI
+ ┃ ┣ ┣ 📂 app               # Páginas e rotas da aplicação Next.js
+ ┃ ┣ ┣ 📂 assets            # Arquivos como imagens
+ ┃ ┣ ┣ 📂 config            # Arquivos com funções utils ou de configuração
+ ┗ 📜 README.md             # Descrição e documentação do projeto
+```
+
+### Backend (NestJS):
+
+Localizado na pasta `backend`, o código do NestJS gerencia a lógica do servidor, as conexões com o banco de dados e a API que alimenta o frontend.
+
+### Frontend (Next.js):
+
+A pasta `frontend` contém a aplicação Next.js. Esta parte do projeto é responsável pela interface do usuário e interação. Dentro desta pasta, os componentes reutilizáveis estão em `components`, enquanto as definições das rotas e suas respectivas lógicas de renderização são encontradas em `app`. A pasta `public` armazena arquivos estáticos que podem ser acessados diretamente pelo navegador, como imagens e ícones.
+
 ## 🚀 Instalação e Uso
 
 ### Pré-requisitos
