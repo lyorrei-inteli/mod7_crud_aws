@@ -4,15 +4,18 @@ import { isServerSide } from "./environment";
 import { getSession } from "next-auth/react";
 
 export const fetchInstance = async (endpoint: string, options?: RequestInit) => {
-    let baseURL: string | null = null
+    let baseURL: string | null = null;
     let session: Session | null = null;
 
     if (isServerSide()) {
         session = await getServerSession(authOptions);
-        baseURL = "http://backend:3001"
+        baseURL =
+            process.env.NEXT_PUBLIC_NODE_ENV == "development"
+                ? (process.env.NEXT_PUBLIC_API_URL as string)
+                : "http://backend:3001";
     } else {
         session = await getSession();
-        baseURL = "http://localhost:3001";
+        baseURL = process.env.NEXT_PUBLIC_API_URL as string;
     }
 
     const finalURL = `${baseURL}${endpoint}`;
@@ -20,8 +23,7 @@ export const fetchInstance = async (endpoint: string, options?: RequestInit) => 
     const mergedOptions: RequestInit = {
         ...options,
         headers: {
-            "Content-Type": "application/json",
-            Authorization: session ?`Bearer ${session.accessToken}` : "",
+            Authorization: session ? `Bearer ${session.accessToken}` : "",
             ...options?.headers,
         },
     };

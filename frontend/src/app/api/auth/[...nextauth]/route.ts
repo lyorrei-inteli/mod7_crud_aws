@@ -21,7 +21,6 @@ export const authOptions: AuthOptions = {
                             body: JSON.stringify({ email: credentials?.email, password: credentials?.password }),
                         }
                     );
-                    console.log("res:", res)
                     
                     return { ...res.user, apiToken: res.token };
                 } catch (error: any) {
